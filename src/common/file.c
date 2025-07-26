@@ -6,7 +6,7 @@
 #include <string.h>
 #include <errno.h>
 
-char* file_read_all(const char* path)
+char* file_read(const char* path)
 {
     FILE* file = fopen(path, "rb");
     if (file == NULL)

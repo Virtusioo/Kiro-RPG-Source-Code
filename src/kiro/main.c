@@ -3,29 +3,29 @@
 #include "common/file.h"
 
 #include <stdio.h>
+#include <string.h>
 
 int main()
 {
-    char* path = "build/map.tmj";
-    char* content = file_read_all(path);
+    const char* path = "build/map.tmj";
+    char* content = file_read(path);
     JsonResult result = json_parse(content);
 
     if (result.errors == NULL) {
-        JsonValue* value = result.value;
-        JsonValue* layers = json_objectget(value, "layers");
+        JsonValue* layers = json_objectget(result.value, "layers");
 
         for (size_t i = 0; i < json_arraylen(layers); i++) {
-
+            
             JsonValue* layer = json_arrayget(layers, i);
-            JsonValue* name = json_objectget(layer, "name");
-            const char* layer_name = json_getstring(name);
+            JsonValue* type = json_objectget(layer, "type");
+            const char* layer_type = json_getstring(type);
 
-            printf("%s\n", layer_name);
+            if (!strcmp(layer_type, "tilelayer"))  {
+                JsonValue* data = json_objectget(layer, "data");
+                printf("%zu\n", json_arraylen(data));
+            }
         }
-
     } else {
-        printf("In .json file '%s':\n%s", path, result.errors);
+        printf("In .json file '%s'\n%s", path, content);
     }
-
-    json_destroyresult(&result);
 }
