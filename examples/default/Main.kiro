@@ -1,0 +1,26 @@
+
+Include "Act1"
+
+Global:
+    Sound Slam = "David_Slam.ogg"
+
+Traits David:   
+    Expression Angry = "David_Angry.png"
+    Expression Furious = "David_Furious.png"
+    Expression Neutral = "David_Neutral.png"
+    Sound Slam = "David_Slam.ogg"
+
+Scene Main:
+    [David becomes Angry]
+    "Why would you do this..."
+
+    [David becomes Furious]
+    [Camera shakes]
+    [Play sound Slam]
+    "ARGGHHHH!"
+
+    [David becomes Neutral]
+    "If you ever do this again..."
+
+    [Fade out]
+    Cut to Act1
