@@ -37,11 +37,10 @@ struct JsonValue
 
 typedef struct 
 {
-    char* errors;
-    JsonValue* value;
+    char* errors; /* NULL if no errors */
+    JsonValue* value; /* Unsafe if errors != NULL */
 } JsonResult;
 
-/* do not use JsonValue* value, if errors != NULL*/
 JsonResult json_parse(const char* source);
 void json_destroy(JsonValue* root);
 void json_destroyresult(JsonResult* result);
