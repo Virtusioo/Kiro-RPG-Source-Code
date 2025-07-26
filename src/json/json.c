@@ -107,6 +107,7 @@ static JsonValue* parse_primary()
 
 static void parse_arrayvalues(Vector* array)
 {
+    /* Safe: vec_push pushes the pointer to the vector (which needs the starting addr to copy the bytes) */
     vec_push(array, &(JsonValue*){parse_expr()});
     while (at()->type == SYM_COMMA && not_eof()) {
         Token* comma = eat();
