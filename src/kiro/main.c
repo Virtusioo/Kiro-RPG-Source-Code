@@ -11,7 +11,7 @@ int main()
         JsonValue* value = result.value;
         JsonValue* test = *(JsonValue**)map_get(value->value.object, "key");
 
-        printf("%d\n", test->value.array.data[0]->type);
+        printf("%f\n", test->value.array.data[1]->value.number);
     } else {
         printf("%s", result.errors);
     }
