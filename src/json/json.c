@@ -296,7 +296,7 @@ float json_getnumber(JsonValue* value)
 bool json_getboolean(JsonValue* value)
 {
     if (value->type != JSON_BOOL)
-        return 0.0f;
+        return false;
     return value->value.boolean;
 }
 
