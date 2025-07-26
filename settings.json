@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "*.bf": "code-text-binary",
-        "*.json": "jsonc",
-        "vector.h": "c",
-        "stddef.h": "c"
-    }
-}
