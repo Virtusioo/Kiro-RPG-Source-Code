@@ -230,7 +230,7 @@ void json_destroy(JsonValue* root)
         return;
     if (root->type == JSON_ARRAY) {
         for (size_t i = 0; i < root->value.array.length; i++)
-            common_free(root->value.array.data[i]);
+            json_destroy(root->value.array.data[i]);
     }
     if (root->type == JSON_STRING) {
         common_free(root->value.string);
