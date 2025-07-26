@@ -7,7 +7,7 @@ SRC := $(shell python python/getcfiles.py src)
 
 all:
 	$(CXX) $(SRC) -o $(OUTPUT) $(FLAGS)
-	./kiro
+	./build/kiro
 
 clean:
 	rm -f $(OUTPUT)
