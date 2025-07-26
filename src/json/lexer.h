@@ -1,6 +1,6 @@
 
-#ifndef tjlexer_h
-#define tjlexer_h
+#ifndef jlexer_h
+#define jlexer_h
 
 #include "common/vector.h"
 

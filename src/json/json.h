@@ -1,6 +1,6 @@
 
-#ifndef tjson_h
-#define tjson_h
+#ifndef json_h
+#define json_h
 
 #include "common/map.h"
 
