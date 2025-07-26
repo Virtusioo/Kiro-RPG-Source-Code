@@ -257,3 +257,18 @@ void json_destroyresult(JsonResult* result)
     json_destroy(result->value);
     common_free(result->errors);
 }
+
+JsonValue* json_objectget(JsonValue* object, char* key) 
+{
+    if (object->type != JSON_OBJECT)
+        return NULL;
+    return *(JsonValue**)map_get(object->value.object, key);
+}
+
+bool json_objectset(JsonValue* object, char* key, JsonValue* value)
+{
+    if (object->type != JSON_OBJECT)
+        return false;
+    map_set(object->value.object, key, &value);
+    return true;
+}

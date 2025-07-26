@@ -45,5 +45,7 @@ typedef struct
 JsonResult json_parse(const char* source);
 void json_destroy(JsonValue* root);
 void json_destroyresult(JsonResult* result);
+JsonValue* json_objectget(JsonValue* object, char* key);
+bool json_objectset(JsonValue* object, char* key, JsonValue* value);
 
 #endif
