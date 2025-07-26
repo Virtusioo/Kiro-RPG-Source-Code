@@ -107,7 +107,10 @@ static JsonValue* parse_primary()
 
 static void parse_arrayvalues(Vector* array)
 {
-    /* Safe: vec_push pushes the pointer to the vector (which needs the starting addr to copy the bytes) */
+    /* This is Safe: 
+        vec_push() pushes the pointer into the vector 
+        (which needs the starting address to copy the bytes of the pointer) 
+    */
     vec_push(array, &(JsonValue*){parse_expr()});
     while (at()->type == SYM_COMMA && not_eof()) {
         Token* comma = eat();
@@ -253,4 +256,4 @@ void json_destroyresult(JsonResult* result)
 {
     json_destroy(result->value);
     common_free(result->errors);
-} /* 255 == 2^8 - 1 POGGERS */
+}
