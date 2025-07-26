@@ -28,7 +28,7 @@ void map_destroy(Map* map)
     common_free(map);
 }
 
-void map_set(Map* map, char* key, void* value)
+void map_set(Map* map, char* key, void* item)
 {
     if ((map->length + 1) * 2 >= map->slots) 
         map_resize(map);
@@ -45,7 +45,7 @@ void map_set(Map* map, char* key, void* value)
         map->entries[hash].value = common_malloc(map->item_size);
     }
 
-    memcpy(map->entries[hash].value, value, map->item_size);
+    memcpy(map->entries[hash].value, item, map->item_size);
     map->entries[hash].occupied = true;
 }
 
