@@ -1,6 +1,6 @@
 
-#ifndef kmap_h
-#define kmap_h
+#ifndef cmap_h
+#define cmap_h
 
 #include <stdbool.h>
 #include <stddef.h>

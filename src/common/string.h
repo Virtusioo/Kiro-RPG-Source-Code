@@ -1,6 +1,6 @@
 
-#define kstring_h
-#define kstring_h
+#define cstring_h
+#define cstring_h
 
 #include <stddef.h>
 

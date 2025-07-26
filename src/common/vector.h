@@ -1,6 +1,6 @@
 
-#ifndef kvector_h
-#define kvector_h
+#ifndef cvector_h
+#define cvector_h
 
 #include <stddef.h>
 
