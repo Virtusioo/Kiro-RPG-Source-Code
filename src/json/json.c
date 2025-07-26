@@ -265,10 +265,42 @@ JsonValue* json_objectget(JsonValue* object, char* key)
     return *(JsonValue**)map_get(object->value.object, key);
 }
 
-bool json_objectset(JsonValue* object, char* key, JsonValue* value)
+JsonValue* json_arrayget(JsonValue* array, size_t index)
 {
-    if (object->type != JSON_OBJECT)
-        return false;
-    map_set(object->value.object, key, &value);
-    return true;
+    if (array->type != JSON_ARRAY) 
+        return NULL;
+    return array->value.array.data[index];
+}
+
+size_t json_arraylen(JsonValue* array)
+{
+    if (array->type != JSON_ARRAY)
+        return 0;
+    return array->value.array.length;
+}
+
+const char* json_getstring(JsonValue* value)
+{
+    if (value->type != JSON_STRING)
+        return NULL;
+    return value->value.string;
+}
+
+float json_getnumber(JsonValue* value)
+{
+    if (value->type != JSON_NUMBER)
+        return 0.0f;
+    return value->value.number;
+}
+
+bool json_getboolean(JsonValue* value)
+{
+    if (value->type != JSON_BOOL)
+        return 0.0f;
+    return value->value.boolean;
+}
+
+bool json_isnull(JsonValue* value)
+{
+    return value->type == JSON_NULL;
 }

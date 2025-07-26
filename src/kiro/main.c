@@ -9,9 +9,13 @@ int main()
 
     if (result.errors == NULL) {
         JsonValue* value = result.value;
-        JsonValue* test = *(JsonValue**)map_get(value->value.object, "key");
+        JsonValue* array = json_objectget(value, "key");
 
-        printf("%f\n", test->value.array.data[1]->value.number);
+        for (size_t i = 0; i < json_arraylen(array); i++) {
+            JsonValue* json_num = json_arrayget(array, i);
+            float number = json_getnumber(json_num);
+            printf("%f\n", number);
+        }
     } else {
         printf("%s", result.errors);
     }

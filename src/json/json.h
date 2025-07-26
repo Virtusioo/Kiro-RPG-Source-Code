@@ -45,7 +45,13 @@ typedef struct
 JsonResult json_parse(const char* source);
 void json_destroy(JsonValue* root);
 void json_destroyresult(JsonResult* result);
+
 JsonValue* json_objectget(JsonValue* object, char* key);
-bool json_objectset(JsonValue* object, char* key, JsonValue* value);
+JsonValue* json_arrayget(JsonValue* array, size_t index);
+size_t json_arraylen(JsonValue* array);
+const char* json_getstring(JsonValue* value);
+float json_getnumber(JsonValue* value);
+bool json_getboolean(JsonValue* value);
+bool json_isnull(JsonValue* value);
 
 #endif
