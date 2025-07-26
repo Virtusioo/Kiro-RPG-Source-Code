@@ -109,7 +109,7 @@ static void parse_arrayvalues(Vector* array)
 {
     /* This is Safe: 
         vec_push() pushes the pointer into the vector 
-        (which needs the starting address to copy the bytes of the pointer) 
+        (which needs a starting address to copy the bytes of the pointer) 
     */
     vec_push(array, &(JsonValue*){parse_expr()});
     while (at()->type == SYM_COMMA && not_eof()) {
