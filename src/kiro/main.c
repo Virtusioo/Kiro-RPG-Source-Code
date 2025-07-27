@@ -3,7 +3,8 @@
 
 int main()
 {
-    game_init();
+    if (!game_init())
+        return 1;
 
     while (game_is_running()) {
         game_update();
