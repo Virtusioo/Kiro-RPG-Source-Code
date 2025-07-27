@@ -1,8 +1,8 @@
 
-import sys, pathlib
+import pathlib
+import sys
 
-directory = pathlib.Path(sys.argv[1]) 
-c_files = list(directory.rglob("*.c"))
+src = pathlib.Path(sys.argv[1])
 
-for file in c_files:
-    print(file)
+for f in src.rglob("*.c"):
+    print(f.as_posix())

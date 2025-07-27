@@ -1,28 +1,44 @@
 
+
+# Compiler & Flags
 CXX := gcc
-FLAGS := -O2 -Ivendor -Isrc
-OUTPUT := build/kiro
+CFLAGS := -O2 -Ivendor -Isrc
 
-SRC := $(shell python py/getcfiles.py src)
-
-ifeq ($(LINUX), 1)
-	$(error Linux not supported yet)
+# Platform-specific
+ifeq ($(LINUX),1)
+    LIBS := $(wildcard lib/linux/*)
+    PASTE_DLLS := python3 py/pastedlls.py linux
+    EXE_EXT :=
 else
-	LIBS := $(wildcard lib/windows/**)
-	PASTE_DLLS := python py/pastedlls.py windows
+    LIBS := $(wildcard lib/windows/*)
+    PASTE_DLLS := python py/pastedlls.py windows
+    EXE_EXT := .exe
 endif
 
-.PHONY: all clean paste_dlls
+# Output binary
+OUTPUT := build/kiro$(EXE_EXT)
 
-all: $(OUTPUT)
-	$(PASTE_DLLS)
+# Source/Objects
+SRC := $(shell python py/getcfiles.py src)
+OBJ := $(patsubst src/%.c, obj/%.o, $(SRC))
+
+all: prepare $(OUTPUT) paste_dlls
 	./$(OUTPUT)
 
-$(OUTPUT): $(SRC)
-	$(CXX) $(SRC) -o $(OUTPUT) $(LIBS) $(FLAGS)
+# Link all object files into final binary
+$(OUTPUT): $(OBJ)
+	$(CXX) $(OBJ) -o $@ $(LIBS) $(CFLAGS)
+
+# Compile individual .c files into .o
+obj/%.o: src/%.c
+	$(CXX) -c $< -o $@ $(CFLAGS)
 
 paste_dlls:
 	$(PASTE_DLLS)
 
 clean:
-	rm -f $(OUTPUT)
+	python py/clean.py
+
+prepare:
+	python py/mkobj.py src
+
