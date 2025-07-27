@@ -10,4 +10,6 @@ int main()
         game_render();
         game_delay();
     }
+
+    return 0;
 }
