@@ -5,9 +5,24 @@ OUTPUT := build/kiro
 
 SRC := $(shell python py/getcfiles.py src)
 
-all:
+ifeq ($(LINUX), 1)
+	$(error Linux not supported yet)
+else
+	LIBS := $(wildcard lib/windows/**)
+	PASTE_DLLS := python py/pastedlls.py windows
+endif
+
+.PHONY: all clean paste_dlls
+
+all: $(OUTPUT)
+	$(PASTE_DLLS)
+	./$(OUTPUT)
+
+$(OUTPUT): $(SRC)
 	$(CXX) $(SRC) -o $(OUTPUT) $(FLAGS)
-	./build/kiro
+
+paste_dlls:
+	$(PASTE_DLLS)
 
 clean:
 	rm -f $(OUTPUT)
