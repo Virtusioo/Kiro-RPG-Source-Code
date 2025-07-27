@@ -1,6 +1,8 @@
 
 #include "game.h"
 #include "debug.h"
+#include "debug_font.h"
+#include "file.h"
 
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
@@ -13,7 +15,7 @@ bool game_running = true;
 static SDL_Event event;
 static Uint64 frame_start;
 
-bool game_init()
+bool game_init(const char* res_folder)
 {
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         SDL_Log(SDL_GetError());
@@ -25,7 +27,9 @@ bool game_init()
         return false;
     }
 
-    window = SDL_CreateWindow("Kiro", 960, 720, 0);
+    file_mount(res_folder);
+
+    window = SDL_CreateWindow("Kiro", 960, 720, SDL_WINDOW_HIDDEN);
 
     if (window == NULL) {
         debug_error_popup(SDL_GetError());
@@ -39,12 +43,16 @@ bool game_init()
         return false;
     }
 
-    debug_font = TTF_OpenFont(DEBUG_FONT_PATH, 35);
+    SDL_IOStream* io = SDL_IOFromConstMem(debug_font_raw, debug_font_raw_size);
+    debug_font = TTF_OpenFontIO(io, true, 35);
 
     if (debug_font == NULL) {
         debug_error_popup(SDL_GetError());
         return false;
     }
+
+    SDL_SetRenderLogicalPresentation(renderer, 960, 720, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+    SDL_ShowWindow(window);
 
     return true;
 }
@@ -78,7 +86,7 @@ void game_render()
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-    debug_error("Oopsies");
+    debug_error("Hello, World");
     SDL_RenderPresent(renderer);
 }
 

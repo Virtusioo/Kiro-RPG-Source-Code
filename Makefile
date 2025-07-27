@@ -23,7 +23,7 @@ SRC := $(shell python py/getcfiles.py src)
 OBJ := $(patsubst src/%.c, obj/%.o, $(SRC))
 
 all: prepare $(OUTPUT) paste_dlls
-	./$(OUTPUT)
+	./$(OUTPUT) build
 
 # Link all object files into final binary
 $(OUTPUT): $(OBJ)

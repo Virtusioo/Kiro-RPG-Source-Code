@@ -1,9 +1,16 @@
 
 #include "core/game.h"
 
-int main()
+#include <stdio.h>
+
+int main(int argc, char** argv)
 {
-    if (!game_init()) {
+    if (argc <= 1) {
+        puts("usage: kiro.exe <project>");
+        return 1;
+    }
+
+    if (!game_init(argv[1])) {
         game_quit();
         return 1;
     }
