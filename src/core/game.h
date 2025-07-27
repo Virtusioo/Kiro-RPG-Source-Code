@@ -12,9 +12,10 @@
 
 #define TARGET_FPS 60
 #define FRAME_DELAY 1000 / TARGET_FPS
+#define DEBUG_FONT_PATH "res/spleen.otf"
 
 bool game_init();
-bool game_is_running();
+bool game_should_continue();
 void game_update();
 void game_render();
 void game_delay();

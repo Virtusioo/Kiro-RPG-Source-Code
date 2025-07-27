@@ -39,7 +39,7 @@ bool game_init()
         return false;
     }
 
-    debug_font = TTF_OpenFont("res/spleen.otf", 35);
+    debug_font = TTF_OpenFont(DEBUG_FONT_PATH, 35);
 
     if (debug_font == NULL) {
         debug_error_popup(SDL_GetError());
@@ -57,7 +57,7 @@ static void game_quit()
     SDL_Quit();
 }
 
-bool game_is_running()
+bool game_should_continue()
 {
     if (!game_running)
         game_quit();
