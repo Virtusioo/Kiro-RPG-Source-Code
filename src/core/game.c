@@ -49,7 +49,7 @@ bool game_init()
     return true;
 }
 
-static void game_quit()
+void game_quit()
 {
     TTF_CloseFont(debug_font);
     SDL_DestroyRenderer(renderer);

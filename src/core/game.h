@@ -15,6 +15,7 @@
 #define DEBUG_FONT_PATH "res/spleen.otf"
 
 bool game_init();
+void game_quit();
 bool game_should_continue();
 void game_update();
 void game_render();
