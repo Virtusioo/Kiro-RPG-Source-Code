@@ -54,7 +54,8 @@ String* str_frombuf(const char* buf, size_t len)
     return str;
 }
 
-void str_appendf(String* str, const char* fmt, ...) {
+void str_appendf(String* str, const char* fmt, ...) 
+{
     va_list args;
     va_start(args, fmt);
     va_list args_copy;
