@@ -43,14 +43,14 @@ typedef struct
 
 JsonResult json_parse(const char* source);
 void json_destroy(JsonValue* root);
-void json_destroyresult(JsonResult* result);
+void json_destroy_result(JsonResult* result);
 
-JsonValue* json_objectget(JsonValue* object, char* key);
-JsonValue* json_arrayget(JsonValue* array, size_t index);
-size_t json_arraylen(JsonValue* array);
-const char* json_getstring(JsonValue* value);
-float json_getnumber(JsonValue* value);
-bool json_getboolean(JsonValue* value);
-bool json_isnull(JsonValue* value);
+JsonValue* json_object_get(JsonValue* object, char* key);
+JsonValue* json_array_get(JsonValue* array, size_t index);
+size_t json_array_len(JsonValue* array);
+const char* json_get_string(JsonValue* value);
+float json_get_number(JsonValue* value);
+bool json_get_boolean(JsonValue* value);
+bool json_is_null(JsonValue* value);
 
 #endif

@@ -252,20 +252,20 @@ void json_destroy(JsonValue* root)
     common_free(root);
 }
 
-void json_destroyresult(JsonResult* result)
+void json_destroy_result(JsonResult* result)
 {
     json_destroy(result->value);
     common_free(result->errors);
 }
 
-JsonValue* json_objectget(JsonValue* object, char* key) 
+JsonValue* json_object_get(JsonValue* object, char* key) 
 {
     if (object->type != JSON_OBJECT)
         return NULL;
     return *(JsonValue**)map_get(object->value.object, key);
 }
 
-JsonValue* json_arrayget(JsonValue* array, size_t index)
+JsonValue* json_array_get(JsonValue* array, size_t index)
 {
     if (array->type != JSON_ARRAY) 
         return NULL;
@@ -279,28 +279,28 @@ size_t json_arraylen(JsonValue* array)
     return array->value.array.length;
 }
 
-const char* json_getstring(JsonValue* value)
+const char* json_get_string(JsonValue* value)
 {
     if (value->type != JSON_STRING)
         return NULL;
     return value->value.string;
 }
 
-float json_getnumber(JsonValue* value)
+float json_get_number(JsonValue* value)
 {
     if (value->type != JSON_NUMBER)
         return 0.0f;
     return value->value.number;
 }
 
-bool json_getboolean(JsonValue* value)
+bool json_get_boolean(JsonValue* value)
 {
     if (value->type != JSON_BOOL)
         return false;
     return value->value.boolean;
 }
 
-bool json_isnull(JsonValue* value)
+bool json_is_null(JsonValue* value)
 {
     return value->type == JSON_NULL;
 }
