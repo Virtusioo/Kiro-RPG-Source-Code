@@ -23,7 +23,7 @@ static void game_quit()
     SDL_Quit();
 }
 
-bool game_isrunning()
+bool game_is_running()
 {
     if (!is_running)
         game_quit();

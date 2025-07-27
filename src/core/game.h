@@ -14,7 +14,7 @@
 #define FRAME_DELAY 1000 / TARGET_FPS
 
 void game_init();
-bool game_isrunning();
+bool game_is_running();
 void game_update();
 void game_render();
 void game_delay();

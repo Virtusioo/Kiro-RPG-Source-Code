@@ -5,7 +5,7 @@ int main()
 {
     game_init();
 
-    while (game_isrunning()) {
+    while (game_is_running()) {
         game_update();
         game_render();
         game_delay();
