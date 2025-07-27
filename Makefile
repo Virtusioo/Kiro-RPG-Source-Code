@@ -19,7 +19,7 @@ all: $(OUTPUT)
 	./$(OUTPUT)
 
 $(OUTPUT): $(SRC)
-	$(CXX) $(SRC) -o $(OUTPUT) $(FLAGS)
+	$(CXX) $(SRC) -o $(OUTPUT) $(LIBS) $(FLAGS)
 
 paste_dlls:
 	$(PASTE_DLLS)
