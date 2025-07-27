@@ -40,9 +40,9 @@ static char* expect(TokenType type, const char* message)
     Token* tok = eat();
     if (tok->type != type) {
         if (tok->type == TK_ERROR) 
-            str_appendf(errors, "line %zu: Syntax Error: %s, got invalid token\n", tok->line, message);
+            sstream_appendf(errors, "line %zu: Syntax Error: %s, got invalid token\n", tok->line, message);
         else
-            str_appendf(errors, "line %zu: Syntax Error: %s, got '%s'\n", tok->line, message, tok->value);
+            sstream_appendf(errors, "line %zu: Syntax Error: %s, got '%s'\n", tok->line, message, tok->value);
         return NULL;
     }
     return strdup(tok->value);
@@ -88,7 +88,7 @@ static JsonValue* parse_primary()
     Token* tok = at();
     switch (tok->type) {
         case TK_ERROR: {
-            str_appendf(errors, "line %zu: %s: %s\n", tok->line, tok->errtype, tok->value);
+            sstream_appendf(errors, "line %zu: %s: %s\n", tok->line, tok->errtype, tok->value);
             return NULL;
         }
         case KW_FALSE:
@@ -115,7 +115,7 @@ static void parse_arrayvalues(Vector* array)
     while (at()->type == SYM_COMMA && not_eof()) {
         Token* comma = eat();
         if (at()->type == SYM_CLOSEBRACKET) {
-            str_appendf(errors, "line %zu: Syntax Error: no trailing commas allowed\n", comma->line);
+            sstream_appendf(errors, "line %zu: Syntax Error: no trailing commas allowed\n", comma->line);
         }
         vec_push(array, &(JsonValue*){parse_expr()});
     }
@@ -172,7 +172,7 @@ static void parse_kvpairs(Map* object)
     while (at()->type == SYM_COMMA && not_eof()) {
         Token* comma = eat();
         if (at()->type == SYM_CLOSEBRACE) {
-            str_appendf(errors, "line %zu: Syntax Error: no trailing commas allowed\n", comma->line);
+            sstream_appendf(errors, "line %zu: Syntax Error: no trailing commas allowed\n", comma->line);
         }
         parse_kvpair(object);
     }
@@ -207,7 +207,7 @@ JsonResult json_parse(const char* source)
     pos = 0;
 
     tokens = json_tokenize(source);
-    errors = str_new();
+    errors = sstream_new();
 
     JsonResult result;
     result.value = parse_expr();
