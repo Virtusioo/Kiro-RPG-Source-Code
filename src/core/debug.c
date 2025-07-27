@@ -25,7 +25,7 @@ void debug_error(const char* fmt, ...)
 
     SDL_Surface* surface = TTF_RenderText_Blended_Wrapped(debug_font, buffer, 0, white, 500);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_free(surface);
+    SDL_DestroySurface(surface);
 
     int w, h;
     SDL_FRect dst = {10.0f, 10.0f, texture->w, texture->h};
