@@ -2,6 +2,9 @@
 #include "string.h"
 #include "common.h"
 
+#include <stdio.h>
+#include <stdarg.h>
+
 String* str_new()
 {
     String* str = common_malloc(sizeof(String) * COMMON_INIT_SIZE);
@@ -49,4 +52,30 @@ String* str_frombuf(const char* buf, size_t len)
         str_write(str, *(buf++));
     }
     return str;
+}
+
+void str_appendf(String* str, const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    va_list args_copy;
+    va_copy(args_copy, args);
+
+    int required = vsnprintf(NULL, 0, fmt, args);
+    va_end(args);
+
+    if (required < 0) {
+        va_end(args_copy);
+        return;
+    }
+
+    while (str->length + required + 1 > str->slots) {
+        str->slots = (str->length + required + 1) * 2;
+        str->data = common_realloc(str->data, str->slots);
+    }
+
+    vsnprintf(str->data + str->length, str->slots - str->length, fmt, args_copy);
+    va_end(args_copy);
+
+    str->length += required;
+    str->data[str->length] = '\0';
 }
