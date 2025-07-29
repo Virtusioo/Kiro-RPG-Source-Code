@@ -72,7 +72,7 @@ bool game_should_continue()
     return game_running;
 }
 
-void game_update()
+static void game_update()
 {
     frame_start = SDL_GetTicks();
     while (SDL_PollEvent(&event)) {
@@ -82,15 +82,14 @@ void game_update()
     }
 }
 
-void game_render()
+static void game_render()
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-    debug_error("Hello, World");
     SDL_RenderPresent(renderer);
 }
 
-void game_delay()
+static void game_delay()
 {
     Uint64 frame_time = SDL_GetTicks() - frame_start;
     if (frame_time < FRAME_DELAY) {
