@@ -3,6 +3,7 @@
 #include "debug.h"
 #include "debug_font.h"
 #include "file.h"
+#include "config/game.h"
 
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
@@ -29,7 +30,7 @@ bool game_init(const char* res_folder)
 
     file_mount(res_folder);
 
-    window = SDL_CreateWindow("Kiro", 960, 720, SDL_WINDOW_HIDDEN);
+    window = SDL_CreateWindow("Kiro", GAME_WIDTH, GAME_HEIGHT, SDL_WINDOW_HIDDEN);
 
     if (window == NULL) {
         debug_error_popup(SDL_GetError());

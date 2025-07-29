@@ -1,5 +1,6 @@
 
 #include "debug.h"
+#include "config/game.h"
 
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
@@ -28,7 +29,7 @@ void debug_error(const char* fmt, ...)
     SDL_DestroySurface(surface);
 
     int w, h;
-    SDL_FRect dst = {10.0f, 10.0f, texture->w, texture->h};
+    SDL_FRect dst = {20.0f, 20.0f, texture->w, texture->h};
     SDL_RenderTexture(renderer, texture, NULL, &dst);
     SDL_DestroyTexture(texture);
     SDL_RenderPresent(renderer);
