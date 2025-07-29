@@ -34,6 +34,6 @@ typedef struct
     size_t line;
 } Token;
 
-Vector* json_tokenize(const char* source);
+Token* json_tokenize(const char* source);
 
 #endif

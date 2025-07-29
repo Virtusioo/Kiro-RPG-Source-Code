@@ -20,7 +20,7 @@ typedef struct
     size_t item_size;
 } Map;
 
-Map* map_new(size_t item_size);
+Map map_new(size_t item_size);
 void map_destroy(Map* map);
 
 void map_set(Map* map, char* key, void* item);

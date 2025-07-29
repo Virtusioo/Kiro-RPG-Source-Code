@@ -5,20 +5,19 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-String* str_new()
+String str_new()
 {
-    String* str = common_malloc(sizeof(String) * COMMON_INIT_SIZE);
-    str->data = common_malloc(sizeof(char) * COMMON_INIT_SIZE);
-    str->data[0] = '\0';
-    str->length = 0;
-    str->slots = COMMON_INIT_SIZE;
+    String str;
+    str.data = common_malloc(sizeof(char) * COMMON_INIT_SIZE);
+    str.data[0] = '\0';
+    str.length = 0;
+    str.slots = COMMON_INIT_SIZE;
     return str;
 }
 
 void str_destroy(String* str)
 {
     common_free(str->data);
-    common_free(str);
 }
 
 void str_write(String* str, char c)
@@ -38,18 +37,18 @@ void str_append(String* str, const char* string)
     }
 }
 
-String* str_newstring(const char* string)
+String str_newstring(const char* string)
 {
-    String* str = str_new();
-    str_append(str, string);
+    String str = str_new();
+    str_append(&str, string);
     return str;
 }
 
-String* str_frombuf(const char* buf, size_t len)
+String str_frombuf(const char* buf, size_t len)
 {
-    String* str = str_new();
+    String str = str_new();
     while (len--) {
-        str_write(str, *(buf++));
+        str_write(&str, *(buf++));
     }
     return str;
 }

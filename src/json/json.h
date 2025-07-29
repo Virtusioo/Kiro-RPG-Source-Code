@@ -21,7 +21,7 @@ typedef union
     bool boolean;
     float number;
     char* string;
-    Map* object;
+    Map object;
     struct 
     {
         JsonValue** data;

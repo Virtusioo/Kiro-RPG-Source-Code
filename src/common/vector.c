@@ -4,20 +4,19 @@
 
 #include <string.h>
 
-Vector* vec_new(size_t item_size)
+Vector vec_new(size_t item_size)
 {
-    Vector* vec = common_malloc(sizeof(Vector));
-    vec->item_size = item_size;
-    vec->data = common_malloc(item_size * COMMON_INIT_SIZE);
-    vec->length = 0;
-    vec->slots = COMMON_INIT_SIZE;
-    return vec;
+    return (Vector) {
+        .item_size = item_size,
+        .data = common_malloc(item_size * COMMON_INIT_SIZE),
+        .length = 0,
+        .slots = COMMON_INIT_SIZE
+    };
 }
 
 void vec_destroy(Vector* vec)
 {
     common_free(vec->data);
-    common_free(vec);
 }
 
 void vec_push(Vector* vec, const void* item)

@@ -7,13 +7,13 @@
 #include <string.h>
 #include <stdlib.h>
 
-static Vector* tokens;
+static Token* tokens;
 static size_t pos;
-static String* errors;
+static String errors;
 
 static Token* at()
 {
-    return vec_get(tokens, pos);
+    return tokens + pos;
 }
 
 static bool not_eof()
@@ -40,9 +40,9 @@ static char* expect(TokenType type, const char* message)
     Token* tok = eat();
     if (tok->type != type) {
         if (tok->type == TK_ERROR) 
-            str_appendf(errors, "line %zu: Syntax Error: %s, got invalid token\n", tok->line, message);
+            str_appendf(&errors, "line %zu: Syntax Error: %s, got invalid token\n", tok->line, message);
         else
-            str_appendf(errors, "line %zu: Syntax Error: %s, got '%s'\n", tok->line, message, tok->value);
+            str_appendf(&errors, "line %zu: Syntax Error: %s, got '%s'\n", tok->line, message, tok->value);
         return NULL;
     }
     return strdup(tok->value);
@@ -88,7 +88,7 @@ static JsonValue* parse_primary()
     Token* tok = at();
     switch (tok->type) {
         case TK_ERROR: {
-            str_appendf(errors, "line %zu: %s: %s\n", tok->line, tok->errtype, tok->value);
+            str_appendf(&errors, "line %zu: %s: %s\n", tok->line, tok->errtype, tok->value);
             return NULL;
         }
         case KW_FALSE:
@@ -115,7 +115,7 @@ static void parse_arrayvalues(Vector* array)
     while (at()->type == SYM_COMMA && not_eof()) {
         Token* comma = eat();
         if (at()->type == SYM_CLOSEBRACKET) {
-            str_appendf(errors, "line %zu: Syntax Error: no trailing commas allowed\n", comma->line);
+            str_appendf(&errors, "line %zu: Syntax Error: no trailing commas allowed\n", comma->line);
         }
         vec_push(array, &(JsonValue*){parse_expr()});
     }
@@ -126,28 +126,20 @@ static JsonValue* parse_array()
 {
     if (at()->type == SYM_OPENBRACKET) {
         advance();
-        Vector* array = vec_new(sizeof(JsonValue*));
+        Vector array = vec_new(sizeof(JsonValue*));
         if (at()->type == SYM_CLOSEBRACKET) {
             advance();
-
-            void* data = array->data;
-            common_free(array); 
-
             return new_json(JSON_ARRAY, (JsonUnion) {
                 .array.length = 0,
-                .array.data = data
+                .array.data = (void*)array.data
             });
         }
 
-        parse_arrayvalues(array);
-
-        size_t length = array->length;
-        void* data = array->data;
-        common_free(array); 
+        parse_arrayvalues(&array);
 
         return new_json(JSON_ARRAY, (JsonUnion) {
-            .array.length = length,
-            .array.data = data
+            .array.length = array.length,
+            .array.data = (void*)array.data
         });
     }
     return parse_primary();
@@ -172,7 +164,7 @@ static void parse_kvpairs(Map* object)
     while (at()->type == SYM_COMMA && not_eof()) {
         Token* comma = eat();
         if (at()->type == SYM_CLOSEBRACE) {
-            str_appendf(errors, "line %zu: Syntax Error: no trailing commas allowed\n", comma->line);
+            str_appendf(&errors, "line %zu: Syntax Error: no trailing commas allowed\n", comma->line);
         }
         parse_kvpair(object);
     }
@@ -183,7 +175,7 @@ static JsonValue* parse_object()
 {
     if (at()->type == SYM_OPENBRACE) {
         advance();
-        Map* object = map_new(sizeof(JsonValue*));
+        Map object = map_new(sizeof(JsonValue*));
         JsonValue* value = new_json(JSON_OBJECT, (JsonUnion){.object = object});
 
         if (at()->type == SYM_CLOSEBRACE) {
@@ -191,7 +183,7 @@ static JsonValue* parse_object()
             return value;
         }
 
-        parse_kvpairs(object);
+        parse_kvpairs(&object);
         return value;
     }
     return parse_array();
@@ -212,17 +204,15 @@ JsonResult json_parse(const char* source)
     JsonResult result;
     result.value = parse_expr();
 
-    if (errors->length != 0)
-        result.errors = errors->data;
+    if (errors.length != 0)
+        result.errors = errors.data;
     else 
         result.errors = NULL;
 
-    common_free(errors);
-
-    for (size_t i = 0; i < tokens->length; i++) {
-        Token* tok = vec_get(tokens, i);
-        common_free(tok->value);
-    }
+    size_t i = 0;
+    while (tokens[i].type != TK_EOF) 
+        common_free(tokens[i].value);
+    common_free(tokens[i].value);
     common_free(tokens);
     
     return result;
@@ -240,14 +230,14 @@ void json_destroy(JsonValue* root)
         common_free(root->value.string);
     }
     if (root->type == JSON_OBJECT) {
-        for (size_t i = 0; i < root->value.object->slots; i++) {
-            MapEntry entry = root->value.object->entries[i];
+        for (size_t i = 0; i < root->value.object.slots; i++) {
+            MapEntry entry = root->value.object.entries[i];
             if (entry.occupied) {
                 common_free(entry.key);
                 json_destroy(*(JsonValue**)entry.value);
             }
         }
-        map_destroy(root->value.object);
+        map_destroy(&root->value.object);
     }
     common_free(root);
 }
@@ -262,7 +252,7 @@ JsonValue* json_object_get(JsonValue* object, char* key)
 {
     if (object->type != JSON_OBJECT)
         return NULL;
-    return *(JsonValue**)map_get(object->value.object, key);
+    return *(JsonValue**)map_get(&object->value.object, key);
 }
 
 JsonValue* json_array_get(JsonValue* array, size_t index)
@@ -272,7 +262,7 @@ JsonValue* json_array_get(JsonValue* array, size_t index)
     return array->value.array.data[index];
 }
 
-size_t json_arraylen(JsonValue* array)
+size_t json_array_len(JsonValue* array)
 {
     if (array->type != JSON_ARRAY)
         return 0;

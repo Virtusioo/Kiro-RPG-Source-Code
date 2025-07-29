@@ -11,11 +11,11 @@ typedef struct
     size_t slots;
 } String;
 
-String* str_new();
+String str_new();
 void str_destroy(String* str);
 
 void str_write(String* str, char c);
 void str_append(String* str, const char* string);
-String* str_newstring(const char* string);
-String* str_frombuf(const char* buf, size_t len);
+String str_newstring(const char* string);
+String str_frombuf(const char* buf, size_t len);
 void str_appendf(String* str, const char* fmt, ...);

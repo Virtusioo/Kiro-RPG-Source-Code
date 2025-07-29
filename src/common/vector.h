@@ -12,7 +12,7 @@ typedef struct
     size_t item_size;
 } Vector;
 
-Vector* vec_new(size_t item_size);
+Vector vec_new(size_t item_size);
 void vec_destroy(Vector* vec);
 
 void vec_push(Vector* vec, const void* item);

@@ -6,14 +6,14 @@
 
 static void map_resize(Map* map);
 
-Map* map_new(size_t item_size)
+Map map_new(size_t item_size)
 {
-    Map* map = common_malloc(sizeof(Map));
-    map->slots = COMMON_INIT_SIZE;
-    map->length = 0;
-    map->item_size = item_size;
-    map->entries = common_malloc(map->slots * sizeof(MapEntry));
-    memset(map->entries, 0, map->slots * sizeof(MapEntry));
+    Map map;
+    map.slots = COMMON_INIT_SIZE;
+    map.length = 0;
+    map.item_size = item_size;
+    map.entries = common_malloc(map.slots * sizeof(MapEntry));
+    memset(map.entries, 0, map.slots * sizeof(MapEntry));
     return map;
 }
 
@@ -25,7 +25,6 @@ void map_destroy(Map* map)
         }
     }
     common_free(map->entries);
-    common_free(map);
 }
 
 void map_set(Map* map, char* key, void* item)
