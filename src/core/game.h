@@ -16,8 +16,6 @@
 bool game_init(const char* res_folder);
 void game_quit();
 bool game_should_continue();
-void game_update();
-void game_render();
-void game_delay();
+void game_display();
 
 #endif

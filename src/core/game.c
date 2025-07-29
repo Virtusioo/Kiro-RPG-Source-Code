@@ -97,3 +97,10 @@ void game_delay()
         SDL_Delay(FRAME_DELAY - frame_time);
     }
 }
+
+void game_display()
+{
+    game_update();
+    game_render();
+    game_delay();
+}

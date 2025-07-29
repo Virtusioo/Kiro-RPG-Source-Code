@@ -15,11 +15,8 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    while (game_should_continue()) {
-        game_update();
-        game_render();
-        game_delay();
-    }
+    while (game_should_continue()) 
+        game_display();
 
     return 0;
 }
