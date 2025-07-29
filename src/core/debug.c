@@ -1,6 +1,7 @@
 
 #include "debug.h"
 #include "config/game.h"
+#include "core/game.h"
 
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
@@ -11,7 +12,6 @@
 
 extern SDL_Renderer* renderer;
 extern TTF_Font* debug_font;
-extern bool game_running;
 
 void debug_error(const char* fmt, ...)
 {
@@ -33,19 +33,13 @@ void debug_error(const char* fmt, ...)
     SDL_RenderTexture(renderer, texture, NULL, &dst);
     SDL_DestroyTexture(texture);
     SDL_RenderPresent(renderer);
-
-    while (game_running) {
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_EVENT_QUIT) {
-                game_running = false;
-                break;
-            }
-        }
-    }
+    game_handle_exit();
 }
 
 void debug_error_popup(const char* text)
 {
     SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", text, NULL);
+    game_quit();
+    exit(1);
 }
 

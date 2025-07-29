@@ -2,7 +2,7 @@
 #include "game.h"
 #include "debug.h"
 #include "debug_font.h"
-#include "file.h"
+#include "common/file.h"
 #include "config/game.h"
 
 #include <SDL3/SDL.h>
@@ -87,6 +87,7 @@ static void game_render()
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
+    debug_error("Error:\nNo .json file named 'chibi.json'");
     SDL_RenderPresent(renderer);
 }
 
@@ -97,6 +98,22 @@ static void game_delay()
         SDL_Delay(FRAME_DELAY - frame_time);
     }
 }
+
+void game_handle_exit()
+{
+    bool waiting = true;
+    while (waiting) {
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_EVENT_QUIT) {
+                waiting = false;
+            }
+        }
+        SDL_Delay(10); // avoid strain
+    }
+    game_quit();    
+    exit(1);      
+}
+
 
 void game_display()
 {

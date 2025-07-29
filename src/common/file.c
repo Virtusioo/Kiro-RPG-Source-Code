@@ -1,6 +1,6 @@
 
 #include "file.h"
-#include "debug.h"
+#include "core/debug.h"
 #include "common/common.h"
 
 #include <stdio.h>
