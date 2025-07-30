@@ -21,10 +21,10 @@ static JsonValue* check_objectget(JsonValue* value, const char* key, JsonType re
     JsonValue* data = json_objectget(value, key);
 
     if (data == NULL) 
-        debug_error("Failed to parse '%s':\nMissing required field 'layers'", curr_tmj);
+        debug_error("Failed to parse '%s':\nMissing required field '%s'", curr_tmj, key);
 
     if (data->type != required)
-        debug_error("Failed to parse '%s':\nValue of field 'layers' is not of type %s", curr_tmj, json_typename(required));
+        debug_error("Failed to parse '%s':\nValue of field '%s' is not of type %s", curr_tmj, key, json_typename(required));
 
     return data;
 }
@@ -85,7 +85,7 @@ static void push_layer(JsonValue* layer)
     JsonValue* layer_type = check_objectget(layer, "type", JSON_STRING);
     const char* type = layer_type->value.string;
 
-    if (!strcmp(type, "tiledlayer"))
+    if (!strcmp(type, "tilelayer"))
         push_tilelayer(layer);
     else if (!strcmp(type, "objectgroup"))
         push_objectgroup(layer);
@@ -153,6 +153,7 @@ TiledData tiled_parse(const char* tmj_path)
         get_layers();
 
     get_tilesets();
+    common_free(map_data);
 
     json_destroyresult(&result);
     return data;
