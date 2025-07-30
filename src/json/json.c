@@ -3,6 +3,7 @@
 #include "lexer.h"
 #include "common/common.h"
 #include "common/string.h"
+#include "core/debug.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -248,7 +249,7 @@ void json_destroyresult(JsonResult* result)
     common_free(result->errors);
 }
 
-JsonValue* json_objectget(JsonValue* object, char* key) 
+JsonValue* json_objectget(JsonValue* object, const char* key) 
 {
     if (object->type != JSON_OBJECT)
         return NULL;
@@ -269,25 +270,16 @@ size_t json_arraylen(JsonValue* array)
     return array->value.array.length;
 }
 
-const char* json_getstring(JsonValue* value)
+const char* json_typename(JsonType type)
 {
-    if (value->type != JSON_STRING)
-        return NULL;
-    return value->value.string;
-}
-
-float json_getnumber(JsonValue* value)
-{
-    if (value->type != JSON_NUMBER)
-        return 0.0f;
-    return value->value.number;
-}
-
-bool json_getboolean(JsonValue* value)
-{
-    if (value->type != JSON_BOOL)
-        return false;
-    return value->value.boolean;
+    switch (type) {
+        case JSON_ARRAY: return "array";
+        case JSON_BOOL: return "bool";
+        case JSON_NULL: return "null";
+        case JSON_NUMBER: return "number";
+        case JSON_STRING: return "string";
+    }
+    return "unknown";
 }
 
 bool json_isnull(JsonValue* value)

@@ -108,7 +108,7 @@ void game_handle_exit()
                 waiting = false;
             }
         }
-        SDL_Delay(10); // avoid strain
+        SDL_Delay(10); /* avoid event strain */
     }
     game_quit();    
     exit(1);      
