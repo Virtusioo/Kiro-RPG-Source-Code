@@ -27,7 +27,7 @@ void map_destroy(Map* map)
     common_free(map->entries);
 }
 
-void map_set(Map* map, const char* key, void* item)
+void map_set(Map* map, char* key, void* item)
 {
     if ((map->length + 1) * 2 >= map->slots) 
         map_resize(map);
@@ -48,7 +48,7 @@ void map_set(Map* map, const char* key, void* item)
     map->entries[hash].occupied = true;
 }
 
-void* map_get(Map* map, const char* key)
+void* map_get(Map* map, char* key)
 {
     size_t hash = common_hash(key) % map->slots;
 

@@ -23,7 +23,7 @@ typedef struct
 Map map_new(size_t item_size);
 void map_destroy(Map* map);
 
-void map_set(Map* map, const char* key, void* item);
-void* map_get(Map* map, const char* key);
+void map_set(Map* map, char* key, void* item);
+void* map_get(Map* map, char* key);
 
 #endif
