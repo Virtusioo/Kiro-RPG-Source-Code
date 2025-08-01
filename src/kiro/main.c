@@ -18,5 +18,6 @@ int main(int argc, char** argv)
     while (game_should_continue()) 
         game_display();
 
+    game_quit();
     return 0;
 }

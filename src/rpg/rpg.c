@@ -56,10 +56,9 @@ RPGMap* rpg_newmap(const char* tmj_path)
 
     for (size_t i = 0; i < data.tilesets.length; i++) {
         TiledTileset tileset = data.tilesets.data[i];
-
         char* newpath = file_resolve(tileset.image);
-        common_free(tileset.image);
         SDL_Texture* image = IMG_LoadTexture(renderer, newpath);
+        common_free(newpath);
         vec_push(&texture_buf, &image);
     }
 

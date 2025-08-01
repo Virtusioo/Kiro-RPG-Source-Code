@@ -57,6 +57,8 @@ bool game_init(const char* res_folder)
 
     SDL_SetRenderLogicalPresentation(renderer, 960, 720, SDL_LOGICAL_PRESENTATION_LETTERBOX);
     SDL_ShowWindow(window);
+    SDL_SetWindowFullscreen(window, true);
+
     rpg_init();
     
     basic_map = rpg_newmap("map.tmj");
@@ -73,16 +75,8 @@ void game_quit()
     SDL_Quit();
 }
 
-void game_hard_exit()
-{
-    game_quit();
-    exit(0);
-}
-
 bool game_should_continue()
 {
-    if (!game_running)
-        game_quit();
     return game_running;
 }
 
@@ -91,7 +85,7 @@ static void game_update()
     frame_start = SDL_GetTicks();
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_EVENT_QUIT) 
-            game_hard_exit();
+            game_running = false;
     }
 }
 
