@@ -28,8 +28,9 @@ typedef struct
 typedef struct 
 {
     bool visible;
-    int* data;
+    size_t* data;
     size_t length;
+    int width;
 } TiledTilelayer;
 
 typedef struct 
@@ -45,8 +46,9 @@ typedef struct
 typedef struct 
 {
     char* image;
-    float tileheight;
-    float tilewidth;
+    int columns;
+    int firstgid;
+    int tilecount;
 } TiledTileset;
 
 typedef struct 
@@ -68,6 +70,8 @@ typedef struct
 } TiledData;
 
 TiledData tiled_parse(const char* tmj_path);
+void tiled_destroylayers(TiledLayers* layers);
+void tiled_destroytilesets(TiledTilesets* tilesets);
 void tiled_destroydata(TiledData* data);
 
 #endif

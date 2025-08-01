@@ -14,10 +14,17 @@ void file_mount(const char* _folder)
     res_folder = _folder;
 }
 
+char* file_resolve(const char* path)
+{
+    char* newpath = common_malloc(FILE_MAX_PATH);
+    snprintf(newpath, FILE_MAX_PATH, "%s/%s", res_folder, path);
+    return newpath;
+}
+
 char* file_read(const char* path)
 {
-    char fullpath[512];
-    snprintf(fullpath, sizeof(fullpath), "%s/%s", res_folder, path);
+    char fullpath[FILE_MAX_PATH];
+    snprintf(fullpath, FILE_MAX_PATH, "%s/%s", res_folder, path);
 
     FILE* file = fopen(fullpath, "rb");
     if (file == NULL)

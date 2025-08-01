@@ -4,6 +4,8 @@
 #include "debug_font.h"
 #include "common/file.h"
 #include "config/game.h"
+#include "rpg/rpg.h"
+#include "common/common.h"
 
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
@@ -15,6 +17,7 @@ bool game_running = true;
 
 static SDL_Event event;
 static Uint64 frame_start;
+static RPGMap* basic_map;
 
 bool game_init(const char* res_folder)
 {
@@ -54,6 +57,9 @@ bool game_init(const char* res_folder)
 
     SDL_SetRenderLogicalPresentation(renderer, 960, 720, SDL_LOGICAL_PRESENTATION_LETTERBOX);
     SDL_ShowWindow(window);
+    rpg_init();
+    
+    basic_map = rpg_newmap("map.tmj");
 
     return true;
 }
@@ -63,7 +69,14 @@ void game_quit()
     TTF_CloseFont(debug_font);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    rpg_quit();
     SDL_Quit();
+}
+
+void game_hard_exit()
+{
+    game_quit();
+    exit(0);
 }
 
 bool game_should_continue()
@@ -77,9 +90,8 @@ static void game_update()
 {
     frame_start = SDL_GetTicks();
     while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_EVENT_QUIT) {
-            game_running = false;
-        }
+        if (event.type == SDL_EVENT_QUIT) 
+            game_hard_exit();
     }
 }
 
@@ -87,7 +99,7 @@ static void game_render()
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-    debug_error("Error:\nNo .json file named 'chibi.json'");
+    rpg_rendermap(basic_map);
     SDL_RenderPresent(renderer);
 }
 

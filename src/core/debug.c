@@ -24,7 +24,7 @@ void debug_error(const char* fmt, ...)
     va_end(args);
     SDL_Color white = {255, 255, 255, 255};
 
-    SDL_Surface* surface = TTF_RenderText_Blended_Wrapped(debug_font, buffer, 0, white, 500);
+    SDL_Surface* surface = TTF_RenderText_Blended_Wrapped(debug_font, buffer, 0, white, 700);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_DestroySurface(surface);
 

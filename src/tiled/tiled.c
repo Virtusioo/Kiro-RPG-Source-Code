@@ -31,7 +31,7 @@ static JsonValue* check_objectget(JsonValue* value, const char* key, JsonType re
 
 static void push_tilelayer(JsonValue* layer)
 {
-    Vector tileidx_buf = vec_new(sizeof(int));
+    Vector tileidx_buf = vec_new(sizeof(size_t));
     JsonValue* tile_data = check_objectget(layer, "data", JSON_ARRAY);
     JsonValue* tile_visible = check_objectget(layer, "visible", JSON_BOOL);
     
@@ -41,15 +41,16 @@ static void push_tilelayer(JsonValue* layer)
         if (tiled_idx->type != JSON_NUMBER)
             debug_error("Failed to parse '%s':\nValue of data item #%zu is not a number", curr_tmj, i);
 
-        vec_push(&tileidx_buf, &(int){tiled_idx->value.number});
+        vec_push(&tileidx_buf, &(size_t){tiled_idx->value.number});
     }
 
     vec_push(&layers_buf, &(TiledLayer) {
         .type = TILED_TILELAYER,
         .tilelayer = {
-            .data = (int*)tileidx_buf.data,
+            .data = (size_t*)tileidx_buf.data,
             .length = tileidx_buf.length,
-            .visible = tile_visible->value.boolean
+            .visible = tile_visible->value.boolean,
+            .width = check_objectget(layer, "width", JSON_NUMBER)->value.number
         }
     });
 }
@@ -125,8 +126,9 @@ static void get_tilesets()
 
         vec_push(&tilesets_buf, &(TiledTileset) {
             .image = strdup(image_info->value.string),
-            .tilewidth = check_objectget(tileset, "tilewidth", JSON_NUMBER)->value.number,
-            .tileheight = check_objectget(tileset, "tileheight", JSON_NUMBER)->value.number
+            .columns = check_objectget(tileset, "columns", JSON_NUMBER)->value.number,
+            .firstgid = check_objectget(tileset, "firstgid", JSON_NUMBER)->value.number,
+            .tilecount = check_objectget(tileset, "tilecount", JSON_NUMBER)->value.number
         });
     }
 
@@ -140,6 +142,7 @@ TiledData tiled_parse(const char* tmj_path)
     layers_buf = vec_new(sizeof(TiledLayer));
 
     char* map_data = file_read(tmj_path);
+
     JsonResult result = json_parse(map_data);
     TiledData data;
 
@@ -154,15 +157,15 @@ TiledData tiled_parse(const char* tmj_path)
 
     get_tilesets();
     common_free(map_data);
-
     json_destroyresult(&result);
+
     return data;
 }
 
-void tiled_destroydata(TiledData* data)
+void tiled_destroylayers(TiledLayers* layers)
 {
-    for (size_t i = 0; i < data->layers.length; i++) {
-        TiledLayer layer = data->layers.data[i];
+    for (size_t i = 0; i < layers->length; i++) {
+        TiledLayer layer = layers->data[i];
         switch (layer.type) {
             case TILED_TILELAYER:
                 common_free(layer.tilelayer.data);
@@ -172,10 +175,20 @@ void tiled_destroydata(TiledData* data)
                 break;
         }
     }
+    common_free(layers->data);
+}
 
-    for (size_t i = 0; i < data->tilesets.length; i++) {
-        TiledTileset tileset = data->tilesets.data[i];
+void tiled_destroytilesets(TiledTilesets* tilesets)
+{
+    for (size_t i = 0; i < tilesets->length; i++) {
+        TiledTileset tileset = tilesets->data[i];
         common_free(tileset.image);
     }
-    common_free(data->tilesets.data);
+    common_free(tilesets->data);
+}
+
+void tiled_destroydata(TiledData* data)
+{
+    tiled_destroylayers(&data->layers);
+    tiled_destroytilesets(&data->tilesets);
 }

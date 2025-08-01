@@ -18,7 +18,6 @@ static Token make_token(TokenType type, String* value)
         .value = value->data,
         .line = line
     };
-    common_free(value);
     return tok;
 }
 

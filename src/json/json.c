@@ -177,15 +177,14 @@ static JsonValue* parse_object()
     if (at()->type == SYM_OPENBRACE) {
         advance();
         Map object = map_new(sizeof(JsonValue*));
-        JsonValue* value = new_json(JSON_OBJECT, (JsonUnion){.object = object});
 
         if (at()->type == SYM_CLOSEBRACE) {
             advance();
-            return value;
+            return new_json(JSON_OBJECT, (JsonUnion){.object = object});
         }
 
         parse_kvpairs(&object);
-        return value;
+        return new_json(JSON_OBJECT, (JsonUnion){.object = object});;
     }
     return parse_array();
 }
@@ -212,7 +211,7 @@ JsonResult json_parse(const char* source)
 
     size_t i = 0;
     while (tokens[i].type != TK_EOF) 
-        common_free(tokens[i].value);
+        common_free(tokens[i++].value);
     common_free(tokens[i].value);
     common_free(tokens);
     
@@ -253,7 +252,10 @@ JsonValue* json_objectget(JsonValue* object, const char* key)
 {
     if (object->type != JSON_OBJECT)
         return NULL;
-    return *(JsonValue**)map_get(&object->value.object, key);
+    void* e = map_get(&object->value.object, key);
+    if (e == NULL)
+        return NULL;
+    return *(JsonValue**)e;
 }
 
 JsonValue* json_arrayget(JsonValue* array, size_t index)
