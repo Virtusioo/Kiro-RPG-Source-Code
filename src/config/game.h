@@ -11,7 +11,7 @@
 #define TARGET_FPS 60
 #define FRAME_DELAY 1000 / TARGET_FPS
 
-#define GAME_WIDTH 960
-#define GAME_HEIGHT 720
+#define GAME_WIDTH 640
+#define GAME_HEIGHT 480
 
 #endif

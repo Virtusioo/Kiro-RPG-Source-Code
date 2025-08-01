@@ -55,10 +55,9 @@ bool game_init(const char* res_folder)
         return false;
     }
 
-    SDL_SetRenderLogicalPresentation(renderer, 960, 720, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+    SDL_SetRenderLogicalPresentation(renderer, GAME_WIDTH, GAME_HEIGHT, SDL_LOGICAL_PRESENTATION_LETTERBOX);
     SDL_ShowWindow(window);
     SDL_SetWindowFullscreen(window, true);
-
     rpg_init();
     
     basic_map = rpg_newmap("map.tmj");

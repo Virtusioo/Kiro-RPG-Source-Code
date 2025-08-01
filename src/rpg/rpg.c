@@ -83,8 +83,7 @@ for (size_t i = 0; i < map->data.layers.length; i++) {
         size_t tile_index = layer.tilelayer.data[j];
         if (tile_index == 0)
             continue;
-
-        // Find correct tileset
+            
         SDL_Texture* texture = NULL;
         TiledTileset* ts = NULL;
 
