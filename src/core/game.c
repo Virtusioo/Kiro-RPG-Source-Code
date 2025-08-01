@@ -77,6 +77,8 @@ void game_quit()
 
 bool game_should_continue()
 {
+    if (!game_running)
+        game_quit();
     return game_running;
 }
 
