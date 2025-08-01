@@ -2,7 +2,7 @@
 
 # Compiler & Flags
 CXX := gcc
-CFLAGS := -O0 -Ivendor -Isrc -g
+CFLAGS := -O2 -Ivendor -Isrc
 
 # Platform-specific
 ifeq ($(LINUX),1)
